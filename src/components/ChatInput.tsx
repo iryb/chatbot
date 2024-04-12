@@ -14,6 +14,7 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         <TextareaAutosize
           rows={2}
           maxRows={4}
+          value={input}
           onChange={(e) => setInput(e.target.value)}
           autoFocus
           placeholder="Write a message..."

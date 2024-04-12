@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { inter } from "@/app/ui/fonts";
 import "./globals.css";
 import { Chat } from "@/components/Chat";
+import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,10 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
-        <Chat />
-        {children}
-      </body>
+      <Providers>
+        <body className={`${inter.className} antialiased`}>
+          <Chat />
+          {children}
+        </body>
+      </Providers>
     </html>
   );
 }
