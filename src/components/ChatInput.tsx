@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { Message } from "@/lib/validators/message";
 import { useMutation } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
 import React, { FC, HTMLAttributes, useState } from "react";
@@ -39,7 +40,7 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
               const message = {
                 id: nanoid(),
-                isUserInput: true,
+                isUserMessage: true,
                 text: input,
               };
 
