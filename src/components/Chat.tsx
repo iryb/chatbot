@@ -5,6 +5,7 @@ import { AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ChatHeader } from "./ChatHeader";
 import { AccordionContent } from "@radix-ui/react-accordion";
 import { ChatInput } from "./ChatInput";
+import { ChatMessages } from "./ChatMessages";
 
 export const Chat: FC = () => {
   return (
@@ -21,7 +22,7 @@ export const Chat: FC = () => {
             </AccordionTrigger>
             <AccordionContent>
               <div className="flex flex-col h-80">
-                {/* messages */}
+                <ChatMessages className="px-2 py-3 flex-1" />
                 <ChatInput className="px-4" />
               </div>
             </AccordionContent>
