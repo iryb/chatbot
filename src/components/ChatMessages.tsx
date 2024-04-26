@@ -30,16 +30,20 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
             })}
           >
             <div
-              className={cn(
-                "flex flex-col space-y-2 text-sm max-w-xs mx-2 overflow-x-hidden",
-                {
-                  "bg-blue-600 text-white": message.isUserMessage,
-                  "bg-gray-200 text-gray-900": !message.isUserMessage,
-                }
-              )}
+              className={
+                "flex flex-col space-y-2 text-sm max-w-xs mx-2 overflow-x-hidden"
+              }
             >
-              <MarkdownLite text={message.text} />
-              {message.text}
+              <p
+                className={cn("px-4 py-2 rounded-lg", {
+                  "bg-blue-600 text-white rounded-br-none":
+                    message.isUserMessage,
+                  "bg-gray-200 text-gray-900 rounded-bl-none":
+                    !message.isUserMessage,
+                })}
+              >
+                <MarkdownLite text={message.text} />
+              </p>
             </div>
           </div>
         </div>
