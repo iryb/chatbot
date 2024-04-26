@@ -1,15 +1,23 @@
 "use client";
+import { MessagesContext } from "@/context/messages";
 import { cn } from "@/lib/utils";
 import { Message } from "@/lib/validators/message";
 import { useMutation } from "@tanstack/react-query";
 import { nanoid } from "nanoid";
-import React, { FC, HTMLAttributes, useState } from "react";
+import React, { FC, HTMLAttributes, useContext, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 
 interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
   const [input, setInput] = useState("");
+  const {
+    messages,
+    addMessage,
+    removeMessage,
+    updateMessage,
+    setIsMessageUpdating,
+  } = useContext(MessagesContext);
 
   const { mutate: sendMessage, isPending } = useMutation({
     mutationFn: async (message: Message) => {
@@ -26,6 +34,17 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
     onSuccess: async (stream) => {
       if (!stream) throw new Error("No stream found");
 
+      const id = nanoid();
+      const responseMessage: Message = {
+        id,
+        isUserMessage: false,
+        text: "",
+      };
+
+      addMessage(responseMessage);
+
+      setIsMessageUpdating(true);
+
       const reader = stream.getReader();
       const decoder = new TextDecoder();
       let done = false;
@@ -34,8 +53,11 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         const { value, done: doneReading } = await reader.read();
         done = doneReading;
         const chunkValue = decoder.decode(value);
-        console.log(chunkValue);
+        updateMessage(id, (prev) => prev + chunkValue);
       }
+
+      setIsMessageUpdating(false);
+      setInput("");
     },
   });
 
