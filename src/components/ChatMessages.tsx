@@ -2,6 +2,7 @@
 import { MessagesContext } from "@/context/messages";
 import { cn } from "@/lib/utils";
 import { FC, HTMLAttributes, useContext } from "react";
+import { MarkdownLite } from "./MarkdownLite";
 
 interface ChatMessagesProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -21,7 +22,28 @@ export const ChatMessages: FC<ChatMessagesProps> = ({
       )}
     >
       <div className="flex-1 flex-grow"></div>
-      ChatMessage
+      {inverseMessages.map((message) => (
+        <div key={message.id} className="chat-message">
+          <div
+            className={cn("flex items-end", {
+              "justify-end": message.isUserMessage,
+            })}
+          >
+            <div
+              className={cn(
+                "flex flex-col space-y-2 text-sm max-w-xs mx-2 overflow-x-hidden",
+                {
+                  "bg-blue-600 text-white": message.isUserMessage,
+                  "bg-gray-200 text-gray-900": !message.isUserMessage,
+                }
+              )}
+            >
+              <MarkdownLite text={message.text} />
+              {message.text}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
