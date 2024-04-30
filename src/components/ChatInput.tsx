@@ -5,13 +5,15 @@ import { Message } from "@/lib/validators/message";
 import { useMutation } from "@tanstack/react-query";
 import { CornerDownLeft, Loader2 } from "lucide-react";
 import { nanoid } from "nanoid";
-import React, { FC, HTMLAttributes, useContext, useState } from "react";
+import React, { FC, HTMLAttributes, useContext, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { toast } from "react-hot-toast";
 
 interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
   const [input, setInput] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const {
     messages,
     addMessage,
@@ -29,6 +31,10 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
         },
         body: JSON.stringify({ messages: [message] }),
       });
+
+      if (!response.ok) {
+        throw new Error();
+      }
 
       return response.body;
     },
@@ -62,6 +68,12 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
       setIsMessageUpdating(false);
       setInput("");
+      textareaRef.current?.focus();
+    },
+    onError(_, message) {
+      toast.error("Something went wrong. Please try again.");
+      removeMessage(message.id);
+      textareaRef.current?.focus();
     },
   });
 
@@ -72,6 +84,7 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
           rows={2}
           maxRows={4}
           disabled={isLoading}
+          ref={textareaRef}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
