@@ -68,7 +68,7 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
       setIsMessageUpdating(false);
       setInput("");
-      textareaRef.current?.focus();
+      setTimeout(() => textareaRef.current?.focus(), 10);
     },
     onError(_, message) {
       toast.error("Something went wrong. Please try again.");
@@ -79,7 +79,7 @@ export const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
   return (
     <div {...props} className={cn("border-t border-zinc-300", className)}>
-      <div className="relative mt-4 flex-1 overflow-hidden rounded-lg border-none outline-none">
+      <div className="relative my-4 flex-1 overflow-hidden rounded-lg border-none outline-none">
         <TextareaAutosize
           rows={2}
           maxRows={4}
